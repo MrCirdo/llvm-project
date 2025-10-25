@@ -3656,6 +3656,12 @@ Status ProcessGDBRemote::LaunchAndConnectToDebugserver(
 
   FileSpec debugserver_path = GetDebugserverPath(*GetTarget().GetPlatform());
 
+  if (!FileSystem::Instance().Exists(debugserver_path)) {
+    return Status::FromErrorString("Could not find '" DEBUGSERVER_BASENAME
+                                   "'. Please ensure it is properly installed "
+                                   "and available in your PATH.");
+  }
+
 #if defined(__APPLE__)
   // On macOS 11, we need to support x86_64 applications translated to
   // arm64. We check whether a binary is translated and spawn the correct
